@@ -3,12 +3,14 @@ import githubReducer from './GithubReducer';
 
 const GithubContext = createContext();
 
-const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
-const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
+// const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
+// const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
 
 export const GithubProvider = ({ children }) => {
   const initialState = {
     users: [],
+    user: {},
+    repos: [],
     loading: false,
   };
 
@@ -31,45 +33,98 @@ export const GithubProvider = ({ children }) => {
   //     });
   //   };
 
-  const searchUsers = async (text) => {
-    setLoading();
+  // const searchUsers = async (text) => {
+  //   setLoading();
 
-    const params = new URLSearchParams({
-      q: text,
-    });
+  //   const params = new URLSearchParams({
+  //     q: text,
+  //   });
 
-    const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
+  //   const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
+  //     headers: {
+  //       Authorization: `token ${GITHUB_TOKEN}`,
+  //     },
+  //   });
 
-    const { items } = await response.json();
+  //   const { items } = await response.json();
 
-    dispatch({
-      type: 'GET_USERS',
-      payload: items,
-    });
-  };
+  //   dispatch({
+  //     type: 'GET_USERS',
+  //     payload: items,
+  //   });
+  // };
 
-  const setLoading = () => {
-    dispatch({ type: 'SET_LOADING' });
-  };
+  // single user
+  // const getUser = async (login) => {
+  //   setLoading();
 
-  const clearUsers = () => {
-    dispatch({
-      type: 'CLEAR_USERS',
-    });
-  };
+  //   const response = await fetch(`${GITHUB_URL}/users/${login}`, {
+  //     headers: {
+  //       Authorization: `token ${GITHUB_TOKEN}`,
+  //     },
+  //   });
+
+  //   if (response.status === 404) {
+  //     window.location = '/notfound';
+  //   } else {
+  //     const data = await response.json();
+
+  //     dispatch({
+  //       type: 'GET_USER',
+  //       payload: data,
+  //     });
+  //   }
+  // };
+
+  // // get user repos
+  // const getUserRepos = async (login) => {
+  //   setLoading();
+
+  //   const params = new URLSearchParams({
+  //     sort: 'created',
+  //     per_page: 10,
+  //   });
+
+  //   const response = await fetch(
+  //     `${GITHUB_URL}/users/${login}/repos?${params}`,
+  //     {
+  //       headers: {
+  //         Authorization: `token ${GITHUB_TOKEN}`,
+  //       },
+  //     }
+  //   );
+
+  //   const data = await response.json();
+  //   dispatch({
+  //     type: 'GET_REPOS',
+  //     payload: data,
+  //   });
+  // };
+
+  // const setLoading = () => {
+  //   dispatch({ type: 'SET_LOADING' });
+  // };
+
+  // const clearUsers = () => {
+  //   dispatch({
+  //     type: 'CLEAR_USERS',
+  //   });
+  // };
 
   return (
     <GithubContext.Provider
       value={{
-        users: state.users,
-        loading: state.loading,
+        ...state,
+        dispatch,
+        // users: state.users,
+        // user: state.user,
+        // repos: state.repos,
+        // loading: state.loading,
         // fetchUsers,
-        searchUsers,
-        clearUsers,
+        // searchUsers,
+        // clearUsers,
+        // getUser,
+        // getUserRepos,
       }}
     >
       {children}
